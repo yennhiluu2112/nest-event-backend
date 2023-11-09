@@ -22,10 +22,17 @@ export class EventsController {
 
 
     @Get()
+    @UsePipes(new ValidationPipe({ transform: true }))
     async findAll(@Query() filter: ListEvents) {
         this.logger.log('findAll route');
-        const events = await this.eventsService.getEventsWithAttendeeCountFiltered(filter);
-        this.logger.debug(`Found ${events.length} events`);
+        const events = await this.eventsService.getEventsWithAttendeeCountFilteredPaginated(
+            filter,
+            {
+                total: true,
+                currentPage: filter.page,
+                limit: 10,
+            }
+        );
         return events;
     }
 
@@ -119,11 +126,16 @@ export class EventsController {
     @Delete(':id')
     @HttpCode(204)
     async remove(@Param('id') id) {
-        const event = await this.repository.findOne(id)
-        if (!event) {
+        // const event = await this.repository.findOne(id)
+        // if (!event) {
+        //     throw new NotFoundException();
+        // }
+        // await this.repository.remove(event)
+
+        const result = await this.eventsService.deleteEvent(id);
+        if (result?.affected !== 1) {
             throw new NotFoundException();
         }
-        await this.repository.remove(event)
     }
 
-}
+} 
