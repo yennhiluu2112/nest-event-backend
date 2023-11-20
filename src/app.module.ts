@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Event } from './events/event.entity';
 import { EventsModule } from './events/events.module';
 import { AppJapanService } from './app.japan.service';
 import { AppDummy } from './app.dummy';
@@ -11,7 +10,8 @@ import ormConfig from './config/orm.config';
 import ormConfigProd from './config/orm.config.prod';
 import { SchoolModule } from './school/school.module';
 import { AuthModule } from './auth/auth.module';
-
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -25,6 +25,11 @@ import { AuthModule } from './auth/auth.module';
     EventsModule,
     SchoolModule,
     AuthModule,
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: true,
+      rootValue: 'graphql'
+    })
   ],
   controllers: [AppController],
   providers: [
