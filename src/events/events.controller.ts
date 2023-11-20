@@ -39,7 +39,7 @@ export class EventsController {
     }
 
 
-    @Get('/practice')
+    @Get('practice')
     async practice() {
         // const event = await this.repository.findOne({ where: { id: 1 }, relations: ['attendees'] })
         // if (!event) {
@@ -81,7 +81,7 @@ export class EventsController {
     @Get(':id')
     async findOne(@Param('id', ParseIntPipe) id: number,) {
         // const event = await this.repository.findOne({ where: { id: id } })
-        const event = await this.eventsService.getEvent(id);
+        const event = await this.eventsService.getEventWithAttendeeCount(id);
 
         if (!event) {
             throw new NotFoundException();
@@ -106,13 +106,13 @@ export class EventsController {
     @Patch(':id')
     @UseInterceptors(ClassSerializerInterceptor)
     async update(
-        @Param('id') id,
+        @Param('id', ParseIntPipe) id: number,
         // @Body(new ValidationPipe({ groups: ['update'] })) input: UpdateEventDto
         @Body() input: UpdateEventDto,
         @CurrentUser() user: User
 
     ) {
-        const event = await this.eventsService.getEvent(id)
+        const event = await this.eventsService.findOne(id)
 
         if (!event) {
             throw new NotFoundException();
@@ -128,10 +128,10 @@ export class EventsController {
     @Delete(':id')
     @HttpCode(204)
     async remove(
-        @Param('id') id,
+        @Param('id', ParseIntPipe) id: number,
         @CurrentUser() user: User
     ) {
-        const event = await this.eventsService.getEvent(id)
+        const event = await this.eventsService.findOne(id)
         if (!event) {
             throw new NotFoundException();
         }
