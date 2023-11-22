@@ -22,14 +22,14 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
     TypeOrmModule.forRootAsync({
       useFactory: process.env.NODE_ENV !== 'production' ? ormConfig : ormConfigProd
     }),
-    EventsModule,
-    SchoolModule,
-    AuthModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
-      rootValue: 'graphql'
-    })
+      playground: true,
+    }),
+    EventsModule,
+    SchoolModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [

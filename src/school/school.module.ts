@@ -4,6 +4,8 @@ import { Subject } from './subject.entity';
 import { Teacher } from './teacher.entity';
 import { TrainingController } from "./training.controller";
 import { TeacherResolver } from "./teacher.resolver";
+import { SubjectResolver } from "./subject.resolver";
+import { CourseResolver } from "./course.resolver";
 
 @Module({
   imports: [
@@ -13,6 +15,6 @@ import { TeacherResolver } from "./teacher.resolver";
     ])
   ],
   controllers: [TrainingController],
-  providers: [TeacherResolver]
+  providers: [TeacherResolver, SubjectResolver, CourseResolver]
 })
 export class SchoolModule { }

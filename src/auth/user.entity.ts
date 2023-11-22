@@ -3,15 +3,25 @@ import { Profile } from "./profile.entity";
 import { Event } from "src/events/event.entity";
 import { Expose } from "class-transformer";
 import { Attendee } from "src/events/attendee.entity";
+import { Field, ObjectType } from "@nestjs/graphql";
 
 @Entity()
+@ObjectType()
 export class User {
+    constructor(
+        private readonly partial?: Partial<User>
+    ) {
+        Object.assign(this, partial);
+    }
+
     @PrimaryGeneratedColumn()
     @Expose()
+    @Field()
     id: number
 
     @Column({ unique: true })
     @Expose()
+    @Field()
     username: string
 
     @Column()
@@ -19,14 +29,17 @@ export class User {
 
     @Column({ unique: true })
     @Expose()
+    @Field()
     email: string
 
     @Column()
     @Expose()
+    @Field()
     firstName: string
 
     @Column()
     @Expose()
+    @Field()
     lastName: string
 
     @OneToOne(() => Profile)
